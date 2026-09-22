@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Penalis — Plataforma de Estudos de Direito Penal</title>
+<meta name="description" content="Questões, flashcards, caderno de erros e explicações comentadas do Código Penal brasileiro.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚖️</text></svg>">
+<link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+
+<header class="topo">
+  <div class="topo-inner">
+    <div class="marca">
+      <span class="marca-icone">⚖️</span>
+      <div>
+        <h1>Penalis</h1>
+        <p>Plataforma de estudos — Direito Penal</p>
+      </div>
+    </div>
+    <button id="btn-tema" class="btn-icone" title="Alternar tema claro/escuro">🌙</button>
+  </div>
+  <nav class="abas" id="abas">
+    <button class="aba ativa" data-aba="inicio">Início</button>
+    <button class="aba" data-aba="questoes">Questões</button>
+    <button class="aba" data-aba="erros">Caderno de Erros <span class="badge" id="badge-erros">0</span></button>
+    <button class="aba" data-aba="flashcards">Flashcards</button>
+    <button class="aba" data-aba="artigos">Artigos comentados</button>
+    <button class="aba" data-aba="juris">Jurisprudência</button>
+  </nav>
+</header>
+
+<main>
+
+<!-- ===================== INÍCIO ===================== -->
+<section class="painel ativo" id="painel-inicio">
+  <div class="hero">
+    <h2>Bem-vindo(a) ao seu plantão de estudos</h2>
+    <p>Questões comentadas, flashcards gerados sob medida, caderno de erros automático e explicações artigo por artigo do Código Penal — com exemplos práticos e jurisprudência do STF e do STJ.</p>
+  </div>
+
+  <div class="cards-stats" id="stats"></div>
+
+  <div class="grid-2">
+    <div class="caixa">
+      <h3>Como estudar aqui</h3>
+      <ol class="passos">
+        <li><strong>Questões</strong> — escolha o assunto e resolva. Cada item vem com comentário e fundamento legal.</li>
+        <li><strong>Caderno de erros</strong> — o que você errar cai automaticamente aqui. Refaça até dominar: a questão só sai do caderno após dois acertos seguidos.</li>
+        <li><strong>Flashcards</strong> — gere baralhos sobre o tópico escolhido e revise pelo sistema de caixas (Leitner).</li>
+        <li><strong>Artigos comentados</strong> — navegue por título, capítulo e seção, escolha o artigo e leia a explicação com exemplo prático.</li>
+      </ol>
+    </div>
+    <div class="caixa">
+      <h3>Desempenho por tema</h3>
+      <div id="desempenho-temas" class="barras"></div>
+    </div>
+  </div>
+
+  <div class="caixa">
+    <h3>Retomar de onde parou</h3>
+    <div class="acoes-rapidas">
+      <button class="btn" data-ir="questoes">▶ Resolver questões</button>
+      <button class="btn" data-ir="erros">📕 Revisar meus erros</button>
+      <button class="btn" data-ir="flashcards">🃏 Gerar flashcards</button>
+      <button class="btn" data-ir="artigos">📖 Estudar um artigo</button>
+      <button class="btn btn-fantasma" id="btn-exportar">⭳ Exportar progresso</button>
+      <button class="btn btn-fantasma" id="btn-importar">⭱ Importar progresso</button>
+      <button class="btn btn-perigo" id="btn-zerar">Zerar progresso</button>
+    </div>
+    <input type="file" id="arquivo-importar" accept="application/json" hidden>
+  </div>
+</section>
+
+<!-- ===================== QUESTÕES ===================== -->
+<section class="painel" id="painel-questoes">
+  <div class="caixa" id="config-questoes">
+    <h3>Montar sessão de questões</h3>
+    <div class="form-grid">
+      <label>Tema
+        <select id="q-tema"><option value="">Todos os temas</option></select>
+      </label>
+      <label>Dificuldade
+        <select id="q-dif">
+          <option value="">Todas</option>
+          <option value="facil">Fácil</option>
+          <option value="media">Média</option>
+          <option value="dificil">Difícil</option>
+        </select>
+      </label>
+      <label>Quantidade
+        <select id="q-qtd">
+          <option>5</option><option selected>10</option><option>15</option><option>20</option><option>30</option>
+        </select>
+      </label>
+      <label>Tipo
+        <select id="q-tipo">
+          <option value="">Múltipla escolha e Certo/Errado</option>
+          <option value="mc">Somente múltipla escolha</option>
+          <option value="ce">Somente certo/errado</option>
+        </select>
+      </label>
+    </div>
+    <label class="check"><input type="checkbox" id="q-gerar" checked> Complementar com questões geradas automaticamente a partir do Código Penal e das súmulas</label>
+    <label class="check"><input type="checkbox" id="q-ineditas"> Priorizar questões que ainda não respondi</label>
+    <div class="acoes-rapidas">
+      <button class="btn btn-primario" id="btn-iniciar-q">Iniciar sessão</button>
+      <span class="dica" id="q-disponiveis"></span>
+    </div>
+  </div>
+
+  <div id="sessao-questoes" hidden>
+    <div class="barra-progresso"><div id="prog-q"></div></div>
+    <div class="caixa" id="area-questao"></div>
+    <div class="acoes-rapidas">
+      <button class="btn" id="btn-responder">Responder</button>
+      <button class="btn btn-primario" id="btn-proxima" hidden>Próxima →</button>
+      <button class="btn btn-fantasma" id="btn-encerrar">Encerrar sessão</button>
+    </div>
+  </div>
+
+  <div class="caixa" id="resumo-questoes" hidden></div>
+</section>
+
+<!-- ===================== CADERNO DE ERROS ===================== -->
+<section class="painel" id="painel-erros">
+  <div class="caixa">
+    <h3>Caderno de erros</h3>
+    <p class="dica">Toda questão errada entra aqui automaticamente, com seu erro, o gabarito e o comentário. Depois de <strong>dois acertos seguidos</strong> na revisão, ela é considerada dominada e sai do caderno.</p>
+    <div class="form-grid">
+      <label>Filtrar por tema <select id="e-tema"><option value="">Todos</option></select></label>
+      <label>Ordenar por
+        <select id="e-ordem">
+          <option value="recentes">Mais recentes</option>
+          <option value="erros">Mais erradas</option>
+          <option value="tema">Tema</option>
+        </select>
+      </label>
+    </div>
+    <div class="acoes-rapidas">
+      <button class="btn btn-primario" id="btn-revisar-erros">▶ Revisar erros em modo questão</button>
+      <button class="btn btn-fantasma" id="btn-limpar-dominadas">Limpar dominadas</button>
+    </div>
+  </div>
+  <div id="lista-erros"></div>
+</section>
+
+<!-- ===================== FLASHCARDS ===================== -->
+<section class="painel" id="painel-flashcards">
+  <div class="caixa" id="config-flash">
+    <h3>Gerar flashcards sobre o assunto escolhido</h3>
+    <div class="form-grid">
+      <label>Fonte do baralho
+        <select id="f-fonte">
+          <option value="tema">Por tema de estudo</option>
+          <option value="estrutura">Por título/capítulo do Código Penal</option>
+          <option value="juris">Somente jurisprudência (súmulas e teses)</option>
+          <option value="erros">A partir dos meus erros</option>
+        </select>
+      </label>
+      <label id="wrap-f-tema">Tema <select id="f-tema"></select></label>
+      <label id="wrap-f-titulo" hidden>Título <select id="f-titulo"></select></label>
+      <label id="wrap-f-cap" hidden>Capítulo / Seção <select id="f-cap"></select></label>
+      <label>Quantidade
+        <select id="f-qtd"><option>10</option><option selected>20</option><option>30</option><option value="999">Todos</option></select>
+      </label>
+    </div>
+    <label class="check"><input type="checkbox" id="f-priorizar" checked> Priorizar cartas das caixas atrasadas (repetição espaçada)</label>
+    <div class="acoes-rapidas">
+      <button class="btn btn-primario" id="btn-gerar-flash">Gerar baralho</button>
+      <span class="dica" id="f-disponiveis"></span>
+    </div>
+  </div>
+
+  <div id="sessao-flash" hidden>
+    <div class="barra-progresso"><div id="prog-f"></div></div>
+    <div class="flashcard" id="flashcard">
+      <div class="flash-inner">
+        <div class="flash-face flash-frente"><span class="flash-tag" id="flash-tema"></span><div id="flash-frente"></div><span class="dica">clique para virar</span></div>
+        <div class="flash-face flash-verso"><div id="flash-verso"></div><span class="flash-fonte" id="flash-fonte"></span></div>
+      </div>
+    </div>
+    <div class="acoes-rapidas" id="flash-acoes">
+      <button class="btn btn-erro" id="btn-f-errei">Não sabia</button>
+      <button class="btn btn-meio" id="btn-f-quase">Quase</button>
+      <button class="btn btn-ok" id="btn-f-acertei">Sabia</button>
+      <button class="btn btn-fantasma" id="btn-f-encerrar">Encerrar</button>
+    </div>
+  </div>
+  <div class="caixa" id="resumo-flash" hidden></div>
+</section>
+
+<!-- ===================== ARTIGOS ===================== -->
+<section class="painel" id="painel-artigos">
+  <div class="caixa">
+    <h3>Escolha o artigo que deseja estudar</h3>
+    <div class="form-grid form-grid-4">
+      <label>Parte <select id="a-parte"></select></label>
+      <label>Título <select id="a-titulo"></select></label>
+      <label>Capítulo / Seção <select id="a-cap"></select></label>
+      <label>Artigo <select id="a-art"></select></label>
+    </div>
+    <div class="acoes-rapidas">
+      <input type="search" id="a-busca" placeholder="🔎 Buscar por número ou nome do crime (ex.: 157, peculato, prescrição)" class="busca">
+    </div>
+    <div id="a-resultados-busca"></div>
+  </div>
+  <div id="ficha-artigo"></div>
+</section>
+
+<!-- ===================== JURISPRUDÊNCIA ===================== -->
+<section class="painel" id="painel-juris">
+  <div class="caixa">
+    <h3>Jurisprudência consolidada</h3>
+    <p class="dica">Súmulas e teses do STF e do STJ mais cobradas em Direito Penal.</p>
+    <div class="form-grid">
+      <label>Tema <select id="j-tema"><option value="">Todos</option></select></label>
+      <label>Busca <input type="search" id="j-busca" placeholder="palavra-chave"></label>
+    </div>
+  </div>
+  <div id="lista-juris"></div>
+</section>
+
+</main>
+
+<footer>
+  <p>Penalis · material de estudo elaborado a partir do Decreto-Lei 2.848/1940 e da jurisprudência do STF e do STJ. Confira sempre a redação vigente da lei e as atualizações jurisprudenciais antes da prova.</p>
+</footer>
+
+<script src="data/estrutura.js"></script>
+<script src="data/artigos-pg.js"></script>
+<script src="data/artigos-pg2.js"></script>
+<script src="data/artigos-pe1.js"></script>
+<script src="data/artigos-pe2.js"></script>
+<script src="data/questoes-pg.js"></script>
+<script src="data/questoes-pe.js"></script>
+<script src="data/flashcards.js"></script>
+<script src="data/jurisprudencia.js"></script>
+<script src="assets/js/app.js"></script>
+</body>
+</html>
