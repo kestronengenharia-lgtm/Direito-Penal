@@ -19,7 +19,7 @@ const TEMAS = (function () {
 
 /* ---------------------------------------------------------------- estado */
 const CHAVE = 'penalis.v1';
-const estadoPadrao = { respondidas:{}, erros:{}, flash:{}, sessoes:[], tema:'escuro' };
+const estadoPadrao = { respondidas:{}, erros:{}, flash:{}, sessoes:[], tema:null };
 let estado = carregar();
 
 function carregar() {
@@ -77,12 +77,30 @@ $$('.aba').forEach(b => b.addEventListener('click', () => irPara(b.dataset.aba))
 $$('[data-ir]').forEach(b => b.addEventListener('click', () => irPara(b.dataset.ir)));
 
 /* tema claro/escuro */
-function aplicarTema() {
-  document.documentElement.dataset.tema = estado.tema;
-  $('#btn-tema').textContent = estado.tema === 'escuro' ? '🌙' : '☀️';
+/* sem escolha salva, seguimos o tema do próprio leitor */
+function temaDoLeitor() {
+  const stamp = document.documentElement.getAttribute('data-theme');
+  if (stamp === 'light') return 'claro';
+  if (stamp === 'dark') return 'escuro';
+  try {
+    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) return 'claro';
+  } catch (e) { /* ignora */ }
+  return 'escuro';
 }
+function temaAtivo() { return estado.tema || temaDoLeitor(); }
+function aplicarTema() {
+  const t = temaAtivo();
+  document.documentElement.dataset.tema = t;
+  $('#btn-tema').textContent = t === 'escuro' ? '🌙' : '☀️';
+  $('#btn-tema').setAttribute('aria-label', t === 'escuro' ? 'Mudar para tema claro' : 'Mudar para tema escuro');
+}
+try {
+  if (window.matchMedia) {
+    window.matchMedia('(prefers-color-scheme: light)').addEventListener('change', () => { if (!estado.tema) aplicarTema(); });
+  }
+} catch (e) { /* ignora */ }
 $('#btn-tema').addEventListener('click', () => {
-  estado.tema = estado.tema === 'escuro' ? 'claro' : 'escuro'; salvar(); aplicarTema();
+  estado.tema = temaAtivo() === 'escuro' ? 'claro' : 'escuro'; salvar(); aplicarTema();
 });
 
 /* =========================================================================

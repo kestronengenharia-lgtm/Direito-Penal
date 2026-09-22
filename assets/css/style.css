@@ -1,34 +1,40 @@
 /* =========================================================================
    Penalis — folha de estilo
+   Paleta: tinta de processo (azul-ardósia profundo) + latão das balanças.
+   Tipografia: Spectral (títulos, ar de doutrina impressa) + IBM Plex Sans.
+   O tema padrão é escuro; o claro é ativado pelo seletor data-tema="claro",
+   que o app ajusta ao tema do próprio leitor no primeiro carregamento.
    ========================================================================= */
 :root{
-  --bg:#0f1218; --bg-2:#161b24; --bg-3:#1e2530;
-  --tinta:#e8ecf3; --tinta-2:#9aa6b8; --tinta-3:#6b7788;
-  --borda:#2a3340;
-  --acento:#c9a227; --acento-2:#e3bf4a;
-  --ok:#3fa374; --erro:#d1566a; --meio:#d49a3a; --info:#5b8dd6;
-  --raio:14px; --sombra:0 6px 24px rgba(0,0,0,.28);
-  --fonte:"Segoe UI",system-ui,-apple-system,"Helvetica Neue",Arial,sans-serif;
-  --serif:Georgia,"Times New Roman",serif;
+  --bg:#131a22; --bg-2:#1a232e; --bg-3:#222e3b;
+  --tinta:#e9eef4; --tinta-2:#9fb0c2; --tinta-3:#71839a;
+  --borda:#2d3b4b;
+  --acento:#c39b2e; --acento-2:#e2c163;
+  --ok:#4aa583; --erro:#d4677a; --meio:#d99a3c; --info:#6c9ede;
+  --raio:14px; --sombra:0 6px 26px rgba(4,8,14,.4);
+  --fonte:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",Arial,sans-serif;
+  --serif:"Spectral",Georgia,"Times New Roman",serif;
 }
 html[data-tema="claro"]{
-  --bg:#f4f1ea; --bg-2:#fffdf8; --bg-3:#efe9dc;
-  --tinta:#1d2430; --tinta-2:#4f5b6b; --tinta-3:#7c8797;
-  --borda:#ded5c4; --acento:#8a6d1f; --acento-2:#a9861f;
-  --sombra:0 4px 18px rgba(60,50,30,.12);
+  --bg:#eaeef3; --bg-2:#ffffff; --bg-3:#dfe6ee;
+  --tinta:#15202c; --tinta-2:#4a5a6b; --tinta-3:#74828f;
+  --borda:#cbd5e0; --acento:#8a6a12; --acento-2:#6f5410;
+  --ok:#2f7d5f; --erro:#b23e52; --meio:#a3721f; --info:#3a6bb0;
+  --sombra:0 4px 18px rgba(20,32,44,.1);
 }
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--tinta);font-family:var(--fonte);line-height:1.6;-webkit-font-smoothing:antialiased}
-h1,h2,h3,h4{line-height:1.25;margin:0 0 .5rem}
+h1,h2,h3,h4{line-height:1.25;margin:0 0 .5rem;text-wrap:balance}
+.enunciado,.erro-detalhe,.bloco li{max-width:72ch}
 a{color:var(--acento-2)}
 main{max-width:1100px;margin:0 auto;padding:1.5rem 1rem 4rem}
 
 /* ---------- topo ---------- */
-.topo{position:sticky;top:0;z-index:20;background:var(--bg-2);border-bottom:1px solid var(--borda);box-shadow:var(--sombra)}
+.topo{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--bg-2);border-bottom:1px solid var(--borda);box-shadow:var(--sombra)}
 .topo-inner{max-width:1100px;margin:0 auto;padding:.9rem 1rem .5rem;display:flex;align-items:center;justify-content:space-between;gap:1rem}
 .marca{display:flex;align-items:center;gap:.75rem}
 .marca-icone{font-size:2rem}
-.marca h1{font-family:var(--serif);font-size:1.5rem;letter-spacing:.04em;color:var(--acento-2);margin:0}
+.marca h1{font-family:var(--serif);font-size:1.55rem;font-weight:600;letter-spacing:.02em;color:var(--acento-2);margin:0}
 .marca p{margin:0;font-size:.8rem;color:var(--tinta-2)}
 .btn-icone{background:var(--bg-3);border:1px solid var(--borda);color:var(--tinta);width:40px;height:40px;border-radius:50%;cursor:pointer;font-size:1.1rem}
 .btn-icone:hover{border-color:var(--acento)}
@@ -79,7 +85,7 @@ select:focus,input:focus,textarea:focus{outline:2px solid var(--acento);outline-
 /* ---------- estatísticas ---------- */
 .cards-stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:1rem;margin-bottom:1.25rem}
 .stat{background:var(--bg-2);border:1px solid var(--borda);border-radius:var(--raio);padding:1rem;text-align:center}
-.stat b{display:block;font-size:1.9rem;font-family:var(--serif);color:var(--acento-2);line-height:1.2}
+.stat b{display:block;font-variant-numeric:tabular-nums;font-size:1.9rem;font-family:var(--serif);color:var(--acento-2);line-height:1.2}
 .stat span{font-size:.8rem;color:var(--tinta-2)}
 .barras{display:flex;flex-direction:column;gap:.6rem;max-height:340px;overflow:auto}
 .barra-item{font-size:.83rem}
@@ -165,3 +171,8 @@ mark{background:var(--acento);color:#15181f;border-radius:3px;padding:0 .15rem}
   main{padding:1rem .75rem 3rem}
   .caixa{padding:1rem}
 }
+
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}
+}
+:focus-visible{outline:2px solid var(--acento-2);outline-offset:2px}
