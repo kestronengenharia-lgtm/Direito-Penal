@@ -38,6 +38,30 @@ seu próprio navegador (`localStorage`) e pode ser exportado/importado em JSON.
 Atualizado com as alterações das Leis 13.964/2019 (Pacote Anticrime), 13.718/2018, 14.132/2021,
 14.155/2021, 14.197/2021, 14.532/2023 e 14.994/2024 (feminicídio como crime autônomo, art. 121-A).
 
+## 📄 Material em PDF — Título V (Das Penas)
+
+Na pasta `material/` há um caderno de estudo pronto para imprimir, em A4:
+
+| Arquivo | Páginas | Conteúdo |
+|---|---|---|
+| `Penas-Titulo-V.pdf` | 21 | completo — capa, folha 1 e folha 2 |
+| `Penas-Folha-1-Artigos.pdf` | 8 | **texto integral** dos arts. 32 a 95, em duas colunas, com capítulos, seções e rubricas marginais |
+| `Penas-Folha-2-Mapa-Mental.pdf` | 13 | **mapa mental**: mapa radial do Título V e nove ramos — penas privativas de liberdade, progressão e limite, restritivas de direitos, multa, dosimetria trifásica, concurso de crimes, sursis, livramento condicional, efeitos da condenação e reabilitação —, mais os quadros de memorização |
+
+O texto legal é a versão compilada do Decreto-Lei 2.848/1940 publicada pelo Planalto, baixada e
+conferida na geração (arquivo `material/dados/titulo-v.json`). Os esquemas trazem também a Lei de
+Execução Penal e súmulas do STF e do STJ, sempre identificadas como tais.
+
+Para regerar os PDFs depois de editar o conteúdo:
+
+```bash
+node material/gerar-pdf.mjs      # requer Playwright/Chromium
+```
+
+- `material/parte2.html` — conteúdo do mapa mental (HTML simples).
+- `material/impressao.css` — estilo de impressão (A4, cores por ramo).
+- `material/gerar-pdf.mjs` — monta o documento, desenha o mapa radial em SVG e imprime os três PDFs.
+
 ## Organização dos arquivos
 
 ```
@@ -53,6 +77,7 @@ data/questoes-pg.js        50 questões da Parte Geral
 data/questoes-pe.js        45 questões da Parte Especial e jurisprudência
 data/flashcards.js         105 flashcards curados
 data/jurisprudencia.js     60 súmulas e teses
+material/                  caderno de estudo em PDF (Título V) e seu gerador
 ```
 
 ## Como acrescentar conteúdo
